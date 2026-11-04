@@ -20,7 +20,7 @@ const COURSES={
 function quote(v){const c=COURSES[v.course],s=c.schemes?.[v.scheme]||c,fixedTerm=!!c.termPrice&&v.billing==='term'&&Math.abs(v.months-4.66)<.005,monthly=['esl','monthly','care'].includes(c.type)&&!fixedTerm,discount=c.type==='esl'&&!c.termPrice&&v.billing==='term'&&Math.abs(v.months-4.66)<.005?(v.course==='12000'?.92:.95):1;
  const rawBase=(fixedTerm?c.termPrice:s.price)*(monthly?v.months:c.type==='none'?0:v.units)*discount,base=Math.round(rawBase),sibling=siblingRule(v),tuition=sibling.apply?Math.round(rawBase*.9):base,siblingDiscount=base-tuition;
  const issues=[];
- const careRate=c.type==='care'||(v.course==='cambridge'&&v.care==='auto')?6500:(c.type==='esl'||['pre','weekend'].includes(v.course))&&v.care==='auto'?(v.course==='12000'?5000:['6800','9800'].includes(v.course)?5500:6000):0;
+ const careRate=c.type==='care'||(v.course==='cambridge'&&v.care==='auto')?6500:(c.type==='esl'||['pre','weekend'].includes(v.course))&&v.care==='auto'?(['9800','12000'].includes(v.course)?5000:v.course==='6800'?5500:6000):0;
  const materialCount=c.matUnit==='期'?(s.unit==='堂'?Math.ceil(v.units/24):v.units):fixedTerm?v.units:v.materialPeriods??1;
  const careMonths=v.course==='cambridge'||(fixedTerm&&(c.type==='esl'||['pre','weekend'].includes(v.course)))?(v.careMonths??4.66):v.months,careTerms=v.careTerms??1,careDiscount=v.course==='cambridge'&&v.care==='auto'?2000*careTerms:0;
  const care=c.type==='care'?0:Math.round(careRate*careMonths),materials=v.chargeMaterials?(s.materials??c.materials??0)*materialCount:0,careMaterials=careRate&&v.chargeCareMaterials?2000*careTerms:0;
